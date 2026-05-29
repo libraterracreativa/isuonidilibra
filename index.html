@@ -1,1 +1,829 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Suoni di Libra · Terra Creativa</title>
+<meta name="description" content="Chiudi gli occhi. Ascolta. Questo è Libra — Via Santa Maria 33, Pietrasanta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0d8;
+    --yellow: #eee89a;
+    --orange: #e2622a;
+    --pink: #e896b8;
+    --pink-light: #f5d0e3;
+    --green: #6b8f6e;
+    --green-light: #a8c5a0;
+    --brown: #3a2e1e;
+    --text: #2e2416;
+    --muted: #7a6a52;
+  }
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100svh;
+    background: var(--yellow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem 5rem;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* Decorative blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .blob-1 {
+    width: 320px; height: 320px;
+    background: var(--orange);
+    top: -80px; right: -60px;
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  }
+  .blob-2 {
+    width: 200px; height: 200px;
+    background: var(--pink);
+    bottom: 60px; left: -40px;
+    border-radius: 50% 40% 60% 40% / 40% 50% 50% 60%;
+    opacity: 0.5;
+  }
+  .blob-3 {
+    width: 140px; height: 140px;
+    background: var(--green);
+    top: 30%; left: 5%;
+    border-radius: 40% 60% 50% 50%;
+    opacity: 0.2;
+  }
+
+  /* Wavy bottom */
+  .wave-bottom {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards 0.3s;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(3.5rem, 11vw, 8rem);
+    line-height: 0.88;
+    color: var(--brown);
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.5s;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-title-alt {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    font-weight: 400;
+    color: var(--orange);
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.7s;
+    margin-bottom: 2rem;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 380px;
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.9s;
+  }
+
+  /* Decorative flowers/asterisks */
+  .deco {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .deco-1 { top: 15%; left: 8%; font-size: 2.5rem; color: var(--orange); opacity: 0.5; }
+  .deco-2 { bottom: 20%; right: 10%; font-size: 1.8rem; color: var(--green); opacity: 0.6; }
+  .deco-3 { top: 60%; left: 3%; font-size: 1.2rem; color: var(--pink); opacity: 0.7; }
+  .deco-4 { top: 10%; right: 20%; font-size: 1rem; color: var(--brown); opacity: 0.3; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.4s;
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .scroll-dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+
+  /* ── PLAYER SECTION ── */
+  .player-section {
+    background: var(--cream);
+    padding: clamp(4rem, 10vw, 7rem) 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .section-tag {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .section-tag::before,
+  .section-tag::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--orange);
+    opacity: 0.5;
+  }
+
+  .player-card {
+    width: 100%;
+    max-width: 500px;
+    background: var(--pink-light);
+    border-radius: 24px;
+    padding: clamp(2rem, 6vw, 3rem);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .player-card::before {
+    content: '♪';
+    position: absolute;
+    top: -10px; right: 20px;
+    font-size: 8rem;
+    color: var(--pink);
+    opacity: 0.2;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .track-info {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .track-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .track-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+    color: var(--brown);
+    margin-bottom: 0.3rem;
+  }
+
+  .track-meta {
+    font-size: 0.8rem;
+    color: var(--orange);
+    font-weight: 500;
+  }
+
+  /* Waveform */
+  .waveform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    height: 44px;
+    margin-bottom: 1.5rem;
+  }
+
+  .wave-bar {
+    width: 3px;
+    background: var(--orange);
+    border-radius: 2px;
+    opacity: 0.25;
+    transition: opacity 0.3s;
+  }
+
+  .playing .wave-bar {
+    opacity: 0.7;
+    animation: wavePulse var(--dur, 0.8s) ease-in-out infinite alternate;
+    animation-delay: var(--delay, 0s);
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 0.6rem; }
+
+  .progress-track {
+    width: 100%;
+    height: 3px;
+    background: rgba(226,98,42,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s linear;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -5px; top: 50%;
+    transform: translateY(-50%);
+    width: 11px; height: 11px;
+    background: var(--orange);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .progress-track:hover .progress-fill::after { opacity: 1; }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.8rem;
+  }
+
+  .btn-play {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(226,98,42,0.4);
+    color: #fff;
+  }
+
+  .btn-play:hover {
+    transform: scale(1.07);
+    box-shadow: 0 6px 28px rgba(226,98,42,0.5);
+  }
+
+  .btn-play svg { width: 24px; height: 24px; fill: currentColor; }
+
+  .btn-secondary {
+    background: rgba(226,98,42,0.1);
+    border: none;
+    cursor: pointer;
+    color: var(--orange);
+    transition: background 0.2s;
+    padding: 0.6rem;
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .btn-secondary:hover { background: rgba(226,98,42,0.2); }
+  .btn-secondary svg { width: 18px; height: 18px; fill: currentColor; }
+
+  /* Volume */
+  .volume-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+  }
+
+  .volume-row svg { width: 15px; height: 15px; fill: var(--muted); flex-shrink: 0; }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 90px; height: 3px;
+    background: rgba(226,98,42,0.25);
+    border-radius: 2px;
+    outline: none; cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--orange);
+    cursor: pointer;
+  }
+
+  audio { display: none; }
+
+  /* ── ABOUT ── */
+  .about-section {
+    background: var(--green);
+    padding: clamp(4rem, 10vw, 7rem) 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: 0;
+    width: 100%;
+  }
+
+  .about-inner {
+    max-width: 580px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .about-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+  }
+
+  .about-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    color: var(--yellow);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .about-text {
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+    color: rgba(255,255,255,0.85);
+    line-height: 1.8;
+    margin-bottom: 1.2rem;
+  }
+
+  .about-text strong { color: #fff; font-weight: 500; }
+
+  /* Pills row */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-weight: 400;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--cream);
+    padding: clamp(4rem, 10vw, 7rem) 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-blob {
+    position: absolute;
+    width: 350px; height: 350px;
+    background: var(--yellow);
+    border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .cta-inner { position: relative; z-index: 1; }
+
+  .cta-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: var(--brown);
+    margin-bottom: 0.8rem;
+    line-height: 1.15;
+  }
+
+  .cta-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .btn-cta {
+    display: inline-block;
+    background: var(--orange);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(226,98,42,0.35);
+  }
+
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(226,98,42,0.45);
+  }
+
+  .btn-cta-alt {
+    display: inline-block;
+    background: transparent;
+    color: var(--green);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    border: 2px solid var(--green);
+    transition: all 0.2s;
+    margin-left: 1rem;
+  }
+
+  .btn-cta-alt:hover {
+    background: var(--green);
+    color: #fff;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown);
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .footer-logo-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.4rem;
+    color: var(--yellow);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-info {
+    font-size: 0.75rem;
+    color: rgba(245,240,216,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+
+  @keyframes wavePulse {
+    from { transform: scaleY(0.25); }
+    to { transform: scaleY(1); }
+  }
+
+  @media (max-width: 480px) {
+    .btn-cta-alt { margin-left: 0; margin-top: 1rem; display: block; }
+    .controls { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <span class="deco deco-1">✦</span>
+  <span class="deco deco-2">✿</span>
+  <span class="deco deco-3">★</span>
+  <span class="deco deco-4">◆</span>
+
+  <div style="margin-bottom:1.5rem; opacity:0; animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards 0.1s; position:relative; z-index:2;">
+    <img src="assets/LIBRA PITTOGRAMMA PNG_Tavola disegno 1.png" alt="Libra pittogramma" style="width:80px; height:80px; object-fit:contain; filter: invert(28%) sepia(60%) saturate(800%) hue-rotate(355deg) brightness(85%);"/>
+  </div>
+
+  <div class="hero-badge">Un'esperienza sonora · Pietrasanta</div>
+
+  <h1 class="hero-title">I Suoni</h1>
+  <p class="hero-title-alt">di Libra</p>
+
+  <p class="hero-sub">
+    Chiudi gli occhi.<br>
+    Questo è il nostro giardino —<br>
+    portalo con te, ovunque tu sia.
+  </p>
+
+  <div class="scroll-hint">
+    <div class="scroll-dot"></div>
+    <span>Ascolta</span>
+  </div>
+
+  <svg class="wave-bottom" viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#f5f0d8"/>
+  </svg>
+</section>
+
+<!-- PLAYER -->
+<section class="player-section">
+  <div class="section-tag">Ascolta adesso</div>
+
+  <div class="player-card">
+    <audio id="audio" preload="metadata">
+      <source src="Libra_Natura_Mix_v2.m4a" type="audio/mp4">
+    </audio>
+
+    <div class="track-info">
+      <p class="track-label">Registrato dal vivo · Estate 2026</p>
+      <h2 class="track-title">Libra in Natura</h2>
+      <p class="track-meta">1 min 59 sec · Via Santa Maria 33</p>
+    </div>
+
+    <div class="waveform" id="waveform"></div>
+
+    <div class="progress-wrap">
+      <div class="progress-track" id="progressTrack">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">1:59</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn-secondary" id="btnRewind" title="−10s">
+        <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>
+      </button>
+
+      <button class="btn-play" id="btnPlay">
+        <svg id="iconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+
+      <button class="btn-secondary" id="btnForward" title="+10s">
+        <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2z"/></svg>
+      </button>
+    </div>
+
+    <div class="volume-row">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+      <input type="range" id="volume" min="0" max="1" step="0.01" value="0.85">
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section">
+  <svg style="position:absolute;top:-2px;left:0;width:100%" viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,25 C360,50 720,0 1080,25 C1260,37 1380,10 1440,25 L1440,0 L0,0 Z" fill="#f5f0d8"/>
+  </svg>
+
+  <div class="about-inner">
+    <span class="about-tag">Lo spazio</span>
+    <h2 class="about-title">Un giardino<br>tra le Apuane e il mare</h2>
+    <p class="about-text">
+      <strong>Libra Terra Creativa</strong> è un'oasi a Pietrasanta, in Versilia.<br>
+      Uno spazio dove il tempo rallenta, la natura parla e le stagioni si sentono prima che si vedano.
+    </p>
+    <p class="about-text">
+      Questi suoni sono stati registrati qui, in questo giardino.<br>
+      Acqua, vento, foglie, silenzio. <strong>Tutto ciò che senti è reale.</strong>
+    </p>
+    <div class="pills">
+      <span class="pill">Yoga</span>
+      <span class="pill">Ceramica</span>
+      <span class="pill">Cucina vegetale</span>
+      <span class="pill">Sound healing</span>
+      <span class="pill">Creatività</span>
+      <span class="pill">Benessere</span>
+    </div>
+  </div>
+
+  <svg style="position:absolute;bottom:-2px;left:0;width:100%" viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,25 C360,0 720,50 1080,25 C1260,13 1380,40 1440,25 L1440,50 L0,50 Z" fill="#f5f0d8"/>
+  </svg>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-blob"></div>
+  <div class="cta-inner">
+    <span class="cta-label">Vieni a trovarci</span>
+    <h2 class="cta-title">Vieni a sentirlo<br>dal vivo</h2>
+    <p class="cta-sub">Via Santa Maria 33 · Pietrasanta · ogni settimana nuovi eventi</p>
+    <div>
+      <a href="https://libraterracreativa.github.io/Giugno26/" class="btn-cta">Scopri gli eventi</a>
+      <a href="https://wa.me/393491408666" class="btn-cta-alt">WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="margin-bottom:0.8rem;">
+    <img src="assets/LIBRA LOGOTIPO PNG_Tavola disegno 1.png" alt="Libra Terra Creativa" style="height:48px; object-fit:contain; filter: brightness(0) invert(1); opacity:0.9;"/>
+  </div>
+  <p class="footer-info">Via Santa Maria 33 · Pietrasanta (LU) · @librapietrasanta</p>
+</footer>
+
+<script>
+  // Waveform
+  const waveform = document.getElementById('waveform');
+  const heights = [14,20,30,18,36,26,14,40,22,34,16,44,28,20,38,24,14,42,26,32,18,38,22,16,40,30,20,14,36,24,44,18,28,16,34,22,38,26,14,20,32,18,36,24,16];
+  heights.forEach((h, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    bar.style.height = h + 'px';
+    bar.style.setProperty('--dur', (0.35 + Math.random() * 0.6).toFixed(2) + 's');
+    bar.style.setProperty('--delay', (i * 0.035).toFixed(2) + 's');
+    waveform.appendChild(bar);
+  });
+
+  const audio = document.getElementById('audio');
+  const btnPlay = document.getElementById('btnPlay');
+  const iconPlay = document.getElementById('iconPlay');
+  const iconPause = document.getElementById('iconPause');
+  const progressFill = document.getElementById('progressFill');
+  const progressTrack = document.getElementById('progressTrack');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
+  const waveformEl = document.getElementById('waveform');
+
+  audio.volume = 0.85;
+
+  function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60).toString().padStart(2, '0');
+    return m + ':' + sec;
+  }
+
+  btnPlay.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      iconPlay.style.display = 'none';
+      iconPause.style.display = '';
+      waveformEl.classList.add('playing');
+    } else {
+      audio.pause();
+      iconPlay.style.display = '';
+      iconPause.style.display = 'none';
+      waveformEl.classList.remove('playing');
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    currentTimeEl.textContent = fmt(audio.currentTime);
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    totalTimeEl.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('ended', () => {
+    iconPlay.style.display = '';
+    iconPause.style.display = 'none';
+    waveformEl.classList.remove('playing');
+    progressFill.style.width = '0%';
+    currentTimeEl.textContent = '0:00';
+  });
+
+  progressTrack.addEventListener('click', (e) => {
+    const rect = progressTrack.getBoundingClientRect();
+    audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+  });
+
+  document.getElementById('volume').addEventListener('input', (e) => {
+    audio.volume = e.target.value;
+  });
+
+  document.getElementById('btnRewind').addEventListener('click', () => {
+    audio.currentTime = Math.max(0, audio.currentTime - 10);
+  });
+
+  document.getElementById('btnForward').addEventListener('click', () => {
+    audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+  });
+</script>
+</body>
+</html>
